@@ -1,0 +1,54 @@
+name: Publish verified V1.2 executable only
+on:
+  workflow_dispatch:
+    inputs:
+      artifact_url:
+        description: Temporary URL for private build 43813510015; executable checksum is fixed below
+        required: true
+        type: string
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare compiled application and general guide
+        env:
+          ARTIFACT_URL: ${{ inputs.artifact_url }}
+        run: |
+          echo "::add-mask::$ARTIFACT_URL"
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.request import urlretrieve
+          from urllib.parse import urlparse
+          import hashlib, os, zipfile
+          url=os.environ['ARTIFACT_URL']
+          parsed=urlparse(url)
+          assert parsed.scheme=='https'
+          assert parsed.hostname.endswith(('.blob.core.windows.net','.githubusercontent.com'))
+          urlretrieve(url,'verified-artifact.zip')
+          out=Path('release');out.mkdir()
+          with zipfile.ZipFile('verified-artifact.zip') as z:
+              matches=[n for n in z.namelist() if Path(n).name=='TransferPricingReviewer.exe']
+              assert len(matches)==1
+              exe=out/'TransferPricingReviewer.exe';exe.write_bytes(z.read(matches[0]))
+          assert exe.read_bytes()[:2]==b'MZ'
+          # This workflow may publish only the exact executable already verified
+          # by Windows build 43813510015. Input cannot select another binary.
+          expected='77209060d066593d55b2024b8662fe14b658da07d60108b74d1dbe9614eea277'
+          assert hashlib.sha256(exe.read_bytes()).hexdigest()==expected, 'Executable differs from the verified V1.2 build'
+          with zipfile.ZipFile(out/'TransferPricingReviewer_Windows.zip','w',compression=zipfile.ZIP_DEFLATED) as z:
+              z.write(exe,exe.name)
+              for source,name in [('README.md','START_HERE.md'),('GENERAL_OVERVIEW.html','General_Overview.html'),('docs/USER_GUIDE.md','User_Guide.md'),('docs/SHARING.md','Sharing_and_Confidentiality.md')]:
+                  z.write(source,name)
+          hashes='\n'.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.name for p in sorted(out.iterdir()))
+          (out/'SHA256SUMS.txt').write_text(hashes+'\n')
+          PY
+      - name: Publish compiled assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload standalone-v1.2 release/* --clobber
+          gh release edit standalone-v1.2 --draft=false
