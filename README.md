@@ -2,7 +2,7 @@
 
 A preliminary review aid for considering a company’s financial position and business context. **Machine learning is used only to identify unusual financial patterns. It does not determine whether transfer pricing is incorrect.**
 
-[General project overview](GENERAL_OVERVIEW.html) · [User guide](docs/USER_GUIDE.md) · [Sharing and confidentiality](docs/SHARING.md)
+[Download Windows application](https://github.com/Witchayada-T/Transfer-pricing-preliminary-risk-indicator/releases/download/standalone-v1.2/TransferPricingReviewer.exe) · [Application with guide (ZIP)](https://github.com/Witchayada-T/Transfer-pricing-preliminary-risk-indicator/releases/download/standalone-v1.2/TransferPricingReviewer_Windows.zip) · [General project overview](GENERAL_OVERVIEW.html) · [User guide](docs/USER_GUIDE.md) · [Sharing and confidentiality](docs/SHARING.md)
 
 ## Purpose
 
@@ -12,9 +12,16 @@ The tool supports a reviewer in identifying matters that may deserve closer atte
 
 - A general HTML overview.
 - A guide explaining how an authorised reviewer uses the local standalone application.
+- A compiled Windows 64-bit application; no Python installation is required.
 - Background links to OECD guidance and Thai Revenue Department materials.
 
-Technical model details, source code, trained-model files, numerical decision rules, company observations and original evidence archives are **not part of this public-facing edition**. The standalone distribution is being reviewed against the confidentiality requirement; no technical package is offered from this page while that review is pending.
+Separate source code, trained-model files, numerical decision-rule documents, company observations and original evidence archives are **not offered in this public-facing edition**. The executable contains the resources it needs to run offline; compilation does not guarantee protection against inspection or reverse engineering.
+
+## Run locally
+
+Download `TransferPricingReviewer.exe` and open it on Windows. If using the ZIP, extract it first. Keep the small controller window open while using the application in the browser. Closing the controller stops the local server. Startup can take a little time while the executable unpacks its runtime. The app does not retrain or collect company data. If the download or unsigned executable is blocked by an organisation's policy, ask its IT administrator about an approved distribution route.
+
+The compiled release passed Windows checks for interface rendering, an independent company-context review, supported financial inference, unsupported-industry handling, server health and controller shutdown. These are software smoke checks, not validation of tax outcomes.
 
 ## Read the legal and professional background
 
