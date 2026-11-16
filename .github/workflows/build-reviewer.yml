@@ -1,0 +1,81 @@
+name: Build public Windows reviewer
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+concurrency:
+  group: public-windows-reviewer
+  cancel-in-progress: false
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 35
+    steps:
+      - name: Preserve committed file bytes
+        run: git config --global core.autocrlf false
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          architecture: 'x64'
+      - name: Install runtime and build dependencies
+        run: python -m pip install -r desktop/requirements-build.txt
+      - name: Check rules and reviewer source runtime
+        run: |
+          python -m unittest discover -s application -p test_review_rules.py
+          python desktop/launcher.py --smoke-test --receipt verification/Windows_source_smoke.json
+      - name: Build standalone
+        run: python -m PyInstaller --clean --noconfirm desktop/windows.spec
+      - name: Verify packaged reviewer
+        shell: pwsh
+        run: |
+          $app = Resolve-Path 'dist/ThaiCompanyReview/ThaiCompanyReview.exe'
+          $receipt = Join-Path $PWD 'dist/ThaiCompanyReview/Windows_verification.json'
+          $process = Start-Process -FilePath $app -ArgumentList @('--smoke-test','--receipt',"`"$receipt`"") -PassThru
+          if (-not $process.WaitForExit(180000)) { $process.Kill(); throw 'Packaged reviewer timeout' }
+          if ($process.ExitCode -ne 0 -or -not (Test-Path $receipt)) { throw 'Packaged reviewer smoke failed' }
+          $result=Get-Content $receipt -Raw | ConvertFrom-Json
+          if (-not $result.frozen -or -not $result.no_historical_company_table) { throw 'Wrong distribution scope' }
+      - name: Verify local server
+        shell: pwsh
+        run: |
+          $app=Resolve-Path 'dist/ThaiCompanyReview/ThaiCompanyReview.exe'
+          $process=Start-Process -FilePath $app -ArgumentList @('--serve','--port','18761') -PassThru
+          try {
+            $ready=$false
+            for($attempt=0;$attempt -lt 60;$attempt++) {
+              if($process.HasExited) { throw 'Local server exited' }
+              try { $reply=Invoke-WebRequest 'http://127.0.0.1:18761/_stcore/health' -TimeoutSec 2; if($reply.Content.Trim() -eq 'ok') { $ready=$true;break } } catch {}
+              Start-Sleep -Seconds 1
+            }
+            if(-not $ready) { throw 'Local server did not become healthy' }
+          } finally { if(-not $process.HasExited) {Stop-Process -Id $process.Id -Force} }
+      - name: Verify desktop controller
+        shell: pwsh
+        run: |
+          $app=Resolve-Path 'dist/ThaiCompanyReview/ThaiCompanyReview.exe'
+          $receipt=Join-Path $PWD 'dist/ThaiCompanyReview/Windows_controller_verification.json'
+          $process=Start-Process -FilePath $app -ArgumentList @('--controller-smoke-test','--receipt',"`"$receipt`"") -PassThru
+          if(-not $process.WaitForExit(180000)) { $process.Kill();throw 'Controller timeout' }
+          if($process.ExitCode -ne 0 -or -not (Test-Path $receipt)) {throw 'Controller failed'}
+      - name: Package reviewed files
+        run: python tools/package_windows.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Transfer-Pricing-Reviewer-Windows
+          path: dist/Transfer-Pricing-Reviewer-Windows.zip
+          retention-days: 90
+      - name: Publish standalone download
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s\n' 'Local public reviewer; original collected-company rows and evidence are excluded.' "Source commit: $GITHUB_SHA" 'Extract the full ZIP, keep _internal beside the EXE, and read SCREENING_LOGIC.html.' > release-notes.txt
+          if ! gh release view reviewer-latest >/dev/null 2>&1; then
+            gh release create reviewer-latest --target "$GITHUB_SHA" --prerelease --latest=false --title 'Windows reviewer — preliminary risk indicator' --notes-file release-notes.txt
+          fi
+          gh release upload reviewer-latest dist/Transfer-Pricing-Reviewer-Windows.zip --clobber
+          gh release edit reviewer-latest --prerelease --latest=false --notes-file release-notes.txt

@@ -1,0 +1,61 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Screening logic</title><style>body{font:17px/1.65 system-ui;color:#23364b;max-width:980px;margin:40px auto;padding:0 24px}h1,h2{color:#4c4274}table{border-collapse:collapse;width:100%}th,td{border-bottom:1px solid #d9deeb;padding:10px;text-align:left}code{background:#eef1f8;padding:3px}a{color:#375d94}</style></head><body><h1>Screening logic in plain English</h1>
+<p><a href="../README.md">Back to the sharing page</a></p>
+<h2>1. Start with a suitable industry reference group</h2>
+<p>The saved models cover six broad pools of related TSIC activities. The actual represented codes are in <a href="../industry_scope.json">industry_scope.json</a>. A company outside that scope is not forced into a similar industry. FY2021–FY2025 are the supported financial years.</p>
+<p>Company functions, assets, risks, group relationships and commercial explanations cannot be established from an industry code alone.</p>
+<h2>2. Run three financial checks in parallel</h2>
+<ul>
+<li><strong>Masked reconstruction:</strong> can the other figures predict one financial measure? Larger observed-target errors indicate an unfamiliar relationship.</li>
+<li><strong>Autoencoder:</strong> can the overall financial pattern be compressed and reconstructed? Larger reconstruction error indicates an unfamiliar pattern.</li>
+<li><strong>Isolation Forest:</strong> is the financial record easier to isolate from peers? Higher reported anomaly scores indicate more unusual combinations.</li>
+</ul>
+<p>They do not pass predictions from one model to another. Each uses saved, training-fitted preprocessing. K-means is retained as preliminary descriptive metadata and does not supply a final risk score.</p>
+<h2>3. Put their different scores on a common scale</h2>
+<p>For each method, rank the raw score against that method’s industry calibration scores. A percentile of 0.93 means that 93% of the reference scores are at or below it. It does <strong>not</strong> mean a 93% chance of a tax error.</p>
+<p>The consensus is:</p>
+<p><code>(masked percentile + autoencoder percentile + Isolation Forest percentile) / 3</code></p>
+<p>Weights are one-third each for transparency. They were not learned from verified tax outcomes and are not claimed to be optimal. The two reconstruction methods may provide correlated evidence.</p>
+<h2>4. Apply the saved cutoff</h2>
+<p>Flag a financial pattern only when <code>consensus &gt; industry cutoff</code>. Equality does not flag it. The cutoff is the higher observed 95th-percentile calibration consensus score, not a statutory limit and not always the number 0.95.</p>
+<table>
+<thead>
+<tr>
+  <th>Industry</th>
+  <th style="text-align:right">Consensus cutoff (rounded)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Electronics manufacturing</td>
+  <td style="text-align:right">0.936667</td>
+</tr>
+<tr>
+  <td>Electronics trading</td>
+  <td style="text-align:right">0.930159</td>
+</tr>
+<tr>
+  <td>IT services</td>
+  <td style="text-align:right">0.927273</td>
+</tr>
+<tr>
+  <td>Printing</td>
+  <td style="text-align:right">0.922222</td>
+</tr>
+<tr>
+  <td>Accounting/back office</td>
+  <td style="text-align:right">0.933333</td>
+</tr>
+<tr>
+  <td>Transport/logistics</td>
+  <td style="text-align:right">0.928571</td>
+</tr>
+</tbody>
+</table>
+<p>The program compares full-precision values. It does not require two individual method flags to agree. Additional financial indicators use training-peer lower/upper deciles, prior losses, debt-service proxies and zero-revenue context. They remain supporting review facts.</p>
+<h2>5. Assess company-specific concerns independently</h2>
+<p>A Yes to an applicable risk question raises Higher concern. Missing notes or an unavailable financial comparison do not suppress the Yes. If there is no risk Yes, incomplete required information yields More information needed; all applicable risks No plus complete required context yields Less concern for this rule component.</p>
+<p>Profile choices and background confirmations are descriptive. They do not automatically indicate risk. The recorded functional profile may overlap others; selecting Routine entity does not imply a guaranteed return or a blanket prohibition on losses.</p>
+<h2>6. Keep the reviewer’s judgement visible</h2>
+<p>A reviewer may find a defensible commercial explanation for a financial flag, supported by the relevant evidence. The prototype does not automatically erase the original flag or make a tax-compliance determination. Its conservative checklist is a starting point for review, not an official HMRC scoring formula.</p>
+<p>There are no verified TP-outcome labels, so accuracy at detecting tax errors is unknown. The reference pool is limited to available observations in six industries. Adding suitable companies and recalibrating could change which observations are flagged.</p>
+</body></html>

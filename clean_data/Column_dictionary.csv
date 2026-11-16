@@ -1,0 +1,36 @@
+﻿table,source_line_item,measure_kind,column,english_column,description,unit
+income,รายได้หลัก,amount,รายได้หลัก [THB],primary_revenue,Primary revenue,THB
+income,รายได้หลัก,percentage_change,รายได้หลัก [% change],primary_revenue_growth_pct,Primary revenue,percent
+income,รายได้รวม,amount,รายได้รวม [THB],revenue,Total revenue,THB
+income,รายได้รวม,percentage_change,รายได้รวม [% change],revenue_growth_pct,Total revenue,percent
+income,ต้นทุนขาย,amount,ต้นทุนขาย [THB],cost_of_sales,Cost of sales,THB
+income,ต้นทุนขาย,percentage_change,ต้นทุนขาย [% change],cost_of_sales_growth_pct,Cost of sales,percent
+income,กำไร(ขาดทุน) ขั้นต้น,amount,กำไร(ขาดทุน) ขั้นต้น [THB],gross_profit,Gross profit or loss,THB
+income,กำไร(ขาดทุน) ขั้นต้น,percentage_change,กำไร(ขาดทุน) ขั้นต้น [% change],gross_profit_growth_pct,Gross profit or loss,percent
+income,ค่าใช้จ่ายในการขายและบริหาร,amount,ค่าใช้จ่ายในการขายและบริหาร [THB],selling_and_administrative_expenses,Selling and administrative expenses,THB
+income,ค่าใช้จ่ายในการขายและบริหาร,percentage_change,ค่าใช้จ่ายในการขายและบริหาร [% change],selling_and_administrative_expenses_growth_pct,Selling and administrative expenses,percent
+income,รายจ่ายรวม,amount,รายจ่ายรวม [THB],total_expenses,Total expenses,THB
+income,รายจ่ายรวม,percentage_change,รายจ่ายรวม [% change],total_expenses_growth_pct,Total expenses,percent
+income,ดอกเบี้ยจ่าย,amount,ดอกเบี้ยจ่าย [THB],interest_expense,Interest expense,THB
+income,ดอกเบี้ยจ่าย,percentage_change,ดอกเบี้ยจ่าย [% change],interest_expense_growth_pct,Interest expense,percent
+income,กำไร(ขาดทุน) ก่อนภาษี,amount,กำไร(ขาดทุน) ก่อนภาษี [THB],profit_before_tax,Profit or loss before tax,THB
+income,กำไร(ขาดทุน) ก่อนภาษี,percentage_change,กำไร(ขาดทุน) ก่อนภาษี [% change],profit_before_tax_growth_pct,Profit or loss before tax,percent
+income,ภาษีเงินได้,amount,ภาษีเงินได้ [THB],tax_expense,Income tax,THB
+income,ภาษีเงินได้,percentage_change,ภาษีเงินได้ [% change],tax_expense_growth_pct,Income tax,percent
+income,กำไร(ขาดทุน) สุทธิ,amount,กำไร(ขาดทุน) สุทธิ [THB],net_profit,Net profit or loss,THB
+income,กำไร(ขาดทุน) สุทธิ,percentage_change,กำไร(ขาดทุน) สุทธิ [% change],net_profit_growth_pct,Net profit or loss,percent
+ratios,อัตราผลตอบแทนจากสินทรัพย์รวม (ROA) (%),ratio,อัตราผลตอบแทนจากสินทรัพย์รวม (ROA) (%),return_on_assets_pct,Return on assets,percent
+ratios,อัตราผลตอบแทนจากส่วนของผู้ถือหุ้น (ROE) (%),ratio,อัตราผลตอบแทนจากส่วนของผู้ถือหุ้น (ROE) (%),return_on_equity_pct,Return on equity,percent
+ratios,ผลตอบแทนจากกำไรขั้นต้นต่อรายได้รวม (%),ratio,ผลตอบแทนจากกำไรขั้นต้นต่อรายได้รวม (%),gross_margin_pct,Gross profit / total revenue,percent
+ratios,ผลตอบแทนจากการดำเนินงานต่อรายได้รวม (%),ratio,ผลตอบแทนจากการดำเนินงานต่อรายได้รวม (%),operating_margin_pct,Operating profit / total revenue,percent
+ratios,ผลตอบแทนจากกำไรสุทธิต่อรายได้รวม (%),ratio,ผลตอบแทนจากกำไรสุทธิต่อรายได้รวม (%),net_margin_pct,Net profit / total revenue,percent
+ratios,อัตราส่วนทุนหมุนเวียน (เท่า),ratio,อัตราส่วนทุนหมุนเวียน (เท่า),current_ratio,Current ratio,times
+ratios,อัตราการหมุนเวียนของลูกหนี้ (เท่า),ratio,อัตราการหมุนเวียนของลูกหนี้ (เท่า),receivables_turnover,Receivables turnover,times
+ratios,อัตราการหมุนเวียนของสินค้าคงเหลือ (เท่า),ratio,อัตราการหมุนเวียนของสินค้าคงเหลือ (เท่า),inventory_turnover,Inventory turnover,times
+ratios,อัตราการหมุนเวียนของเจ้าหนี้ (เท่า),ratio,อัตราการหมุนเวียนของเจ้าหนี้ (เท่า),payables_turnover,Payables turnover,times
+ratios,อัตราการหมุนเวียนของสินทรัพย์รวม (เท่า),ratio,อัตราการหมุนเวียนของสินทรัพย์รวม (เท่า),asset_turnover,Total asset turnover,times
+ratios,อัตราค่าใช้จ่ายการดำเนินงานต่อรายได้รวม (%),ratio,อัตราค่าใช้จ่ายการดำเนินงานต่อรายได้รวม (%),operating_expense_ratio_pct,Operating expenses / total revenue,percent
+ratios,อัตราส่วนสินทรัพย์รวมต่อส่วนของผู้ถือหุ้น (เท่า),ratio,อัตราส่วนสินทรัพย์รวมต่อส่วนของผู้ถือหุ้น (เท่า),assets_to_equity,Total assets / equity,times
+ratios,อัตราส่วนหนี้สินรวมต่อสินทรัพย์รวม (เท่า),ratio,อัตราส่วนหนี้สินรวมต่อสินทรัพย์รวม (เท่า),liabilities_to_assets,Total liabilities / assets,times
+ratios,อัตราส่วนหนี้สินรวมต่อส่วนของผู้ถือหุ้น (เท่า),ratio,อัตราส่วนหนี้สินรวมต่อส่วนของผู้ถือหุ้น (เท่า),liabilities_to_equity,Total liabilities / equity,times
+ratios,อัตราส่วนหนี้สินรวมต่อทุนดำเนินงาน (เท่า),ratio,อัตราส่วนหนี้สินรวมต่อทุนดำเนินงาน (เท่า),liabilities_to_working_capital,Total liabilities / working capital,times

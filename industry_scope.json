@@ -1,0 +1,43 @@
+{
+  "edition": "public-reviewer",
+  "financial_years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "represented_tsic_codes": {
+    "electronics_manufacturing": [
+      "26101",
+      "26102",
+      "26103",
+      "26104"
+    ],
+    "electronics_trading": [
+      "46510",
+      "46521",
+      "46522"
+    ],
+    "it_services": [
+      "62021",
+      "62022",
+      "62090"
+    ],
+    "printing_production": [
+      "18111",
+      "18112"
+    ],
+    "professional_back_office": [
+      "69200",
+      "82110",
+      "82199"
+    ],
+    "road_freight": [
+      "49331",
+      "49334",
+      "49339"
+    ]
+  },
+  "scope": "Business-activity coverage only; no original company identities or financial rows are included."
+}
